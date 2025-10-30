@@ -3,6 +3,7 @@ package it.unibo.exceptions;
 import it.unibo.exceptions.fakenetwork.api.NetworkComponent;
 import it.unibo.exceptions.fakenetwork.impl.ServiceBehindUnstableNetwork;
 
+import java.io.IOException;
 import java.io.PrintStream;
 
 import static it.unibo.exceptions.arithmetic.ArithmeticService.DIVIDED;
@@ -44,11 +45,17 @@ public final class UseArithmeticService {
     }
 
     private static void retrySendOnNetworkError(final NetworkComponent server, final String message) {
-        /*
-         * This method should re-try to send message to the provided server, catching all IOExceptions,
-         * until it succeeds.
-         */
+        boolean done = false;
+        while (!done) {
+            try {
+                server.sendData(message);   
+                done = true;                
+            } catch (IOException e) {
+                System.out.println("Retrying send due to network error: " + e.getMessage());
+            }
+        }
     }
+
 
     private static String retryReceiveOnNetworkError(final NetworkComponent server) {
         /*

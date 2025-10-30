@@ -7,14 +7,7 @@ package it.unibo.collections.social.impl;
 import it.unibo.collections.social.api.SocialNetworkUser;
 import it.unibo.collections.social.api.User;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This will be an implementation of
@@ -75,8 +68,11 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     public SocialNetworkUserImpl(
         final String name, 
-        final String surname, final String user, final int userAge) {
-        super(null, null, null, 0);
+        final String surname, 
+        final String user, 
+        final int userAge) {
+        super(name, surname, user, userAge);
+        this.followedUsers = new HashMap<>();    
     }
 
     /*
@@ -86,15 +82,30 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
         final String name, 
         final String surname, 
         final String user) {
-        super(name, surname, user, -1);
+        this(name, surname, user, -1);
     }
     /*
      * [METHODS]
      *
      * Implements the methods below
+     * Adds a friend to the list of this user's current friends.
+     *
+     * @param group
+     *            the group (circle) on which the user in going to be added
+     * @param user
+     *            the user to be added as a user followed
+     * @return true if the user to be added as a followed person does not exist
+     *         yet, false otherwise
      */
+     
     @Override
     public boolean addFollowedUser(final String circle, final U user) {
+        if (!this.followedUsers.containsKey(circle)) {
+            this.followedUsers.put(circle, new HashSet<>());
+        }
+        if (this.followedUsers.get(circle).add(user)) {
+            return true;
+        }
         return false;
     }
 
@@ -105,11 +116,21 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      */
     @Override
     public Collection<U> getFollowedUsersInGroup(final String groupName) {
+        if (this.followedUsers.containsKey(groupName)) {
+            return Collections.unmodifiableCollection(this.followedUsers.get(groupName));
+        }
+        if (!this.followedUsers.containsKey(groupName)) {
+            return Collections.emptySet(); //differenza con emptyList
+        }
         return null;
     }
 
     @Override
     public List<U> getFollowedUsers() {
-        return null;
+        List<U> allFollowedUsers = new ArrayList<>();
+        for (Set<U> usersSet : this.followedUsers.values()) {
+            allFollowedUsers.addAll(usersSet);
+        }
+        return Collections.unmodifiableList(allFollowedUsers); //differenza collection-collections
     }
 }

@@ -58,12 +58,16 @@ public final class UseArithmeticService {
 
 
     private static String retryReceiveOnNetworkError(final NetworkComponent server) {
-        /*
-         * This method should re-try to retrieve information from the provided server, catching all IOExceptions,
-         * until it succeeds.
-         */
-        return null;
+        while (true) {
+            try {
+                return server.receiveResponse();  // restituisce la risposta se riesce
+            } catch (IOException e) {
+                // errore di rete, riprova
+                System.out.println("Retrying receive due to network error: " + e.getMessage());
+            }
+        }
     }
+
 
     private static void assertEqualsAsDouble(final String expected, final String actual) {
         final var message = ": expected " + expected + " and received " + actual;

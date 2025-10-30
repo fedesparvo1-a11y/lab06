@@ -119,11 +119,9 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
         if (this.followedUsers.containsKey(groupName)) {
             return Collections.unmodifiableCollection(this.followedUsers.get(groupName));
         }
-        if (!this.followedUsers.containsKey(groupName)) {
-            return Collections.emptySet(); //differenza con emptyList
-        }
-        return null;
+        return Collections.emptySet();
     }
+
 
     @Override
     public List<U> getFollowedUsers() {
@@ -131,6 +129,6 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
         for (Set<U> usersSet : this.followedUsers.values()) {
             allFollowedUsers.addAll(usersSet);
         }
-        return Collections.unmodifiableList(allFollowedUsers); //differenza collection-collections
+        return Collections.unmodifiableList(allFollowedUsers); 
     }
 }

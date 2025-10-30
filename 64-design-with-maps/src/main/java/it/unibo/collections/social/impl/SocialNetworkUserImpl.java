@@ -27,6 +27,8 @@ import java.util.Set;
  */
 public final class SocialNetworkUserImpl<U extends User> extends UserImpl implements SocialNetworkUser<U> {
 
+    private final Map<String, Set<U>> followedUsers;
+
     /*
      *
      * [FIELDS]
@@ -38,7 +40,15 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *
      * think of what type of keys and values would best suit the requirements
      */
+    public SocialNetworkUserImpl(
+        final String firstName,
+        final String lastName, 
+        final String username,
+        final Integer age) {
+        super(firstName, lastName, username, age);
+        this.followedUsers = new HashMap<>();      
 
+    }
     /*
      * [CONSTRUCTORS]
      *
@@ -63,14 +73,21 @@ public final class SocialNetworkUserImpl<U extends User> extends UserImpl implem
      *            alias of the user, i.e. the way a user is identified on an
      *            application
      */
-    public SocialNetworkUserImpl(final String name, final String surname, final String user, final int userAge) {
+    public SocialNetworkUserImpl(
+        final String name, 
+        final String surname, final String user, final int userAge) {
         super(null, null, null, 0);
     }
 
     /*
      * 2) Define a further constructor where the age defaults to -1
      */
-
+    public SocialNetworkUserImpl(
+        final String name, 
+        final String surname, 
+        final String user) {
+        super(name, surname, user, -1);
+    }
     /*
      * [METHODS]
      *

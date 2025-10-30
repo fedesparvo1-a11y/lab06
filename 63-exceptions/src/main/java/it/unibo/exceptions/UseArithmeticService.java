@@ -45,11 +45,10 @@ public final class UseArithmeticService {
     }
 
     private static void retrySendOnNetworkError(final NetworkComponent server, final String message) {
-        boolean done = false;
-        while (!done) {
+        while (true) {
             try {
                 server.sendData(message);   
-                done = true;                
+                return;                
             } catch (IOException e) {
                 System.out.println("Retrying send due to network error: " + e.getMessage());
             }
@@ -60,9 +59,8 @@ public final class UseArithmeticService {
     private static String retryReceiveOnNetworkError(final NetworkComponent server) {
         while (true) {
             try {
-                return server.receiveResponse();  // restituisce la risposta se riesce
+                return server.receiveResponse(); 
             } catch (IOException e) {
-                // errore di rete, riprova
                 System.out.println("Retrying receive due to network error: " + e.getMessage());
             }
         }

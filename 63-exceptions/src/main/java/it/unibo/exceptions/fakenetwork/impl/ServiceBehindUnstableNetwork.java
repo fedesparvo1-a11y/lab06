@@ -27,7 +27,7 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
      */
     public ServiceBehindUnstableNetwork(final double failProbability, final int randomSeed) {
         if (failProbability < 0 || failProbability >= 1) {
-                throw new IllegalArgumentException("Failure probability must be between 0 (inclusive) and 1 (exclusive)");
+            throw new IllegalArgumentException("Failure probability must be between 0 (inclusive) and 1 (exclusive)");
         }
         this.failProbability = failProbability;
         randomGenerator = new Random(randomSeed);

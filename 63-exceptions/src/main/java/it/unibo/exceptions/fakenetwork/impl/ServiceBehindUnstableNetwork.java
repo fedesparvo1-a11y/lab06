@@ -79,8 +79,13 @@ public final class ServiceBehindUnstableNetwork implements NetworkComponent {
 
     private void accessTheNetwork(final String message) throws IOException {
         if (randomGenerator.nextDouble() < failProbability) {
-            throw new IOException("Generic I/O error");
+            if (message == null) {
+                throw new NetworkException(); 
+            } else {
+                throw new NetworkException(message); 
+            }
         }
     }
+
 
 }

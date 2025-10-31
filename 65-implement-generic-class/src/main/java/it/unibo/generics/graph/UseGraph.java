@@ -28,7 +28,7 @@ public final class UseGraph {
         /*
          * Test your graph implementation(s) by calling testGraph
          */
-        testGraph(null);
+        testGraph(new it.unibo.generics.graph.impl.GraphImpl<>());
     }
 
     private static void testGraph(final Graph<String> graph) {

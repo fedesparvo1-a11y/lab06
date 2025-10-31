@@ -31,28 +31,28 @@ public class GraphImpl<N> implements Graph<N> {
     }
         
     @Override
-    public List<N> getPath(N source, N target) {
-        if(source == null || target == null) return Collections.emptyList();
-        Set<N> visited = new HashSet<>();
-        Map<N, N> predecessorMap = new HashMap<>();
-        Queue<N> queue = new LinkedList<>();
-        queue.add(source);
-        visited.add(source);
+    public List<N> getPath(final N source, final N target) {
+        if (source == null || target == null) {
+            return List.of();
+        }
+        final Queue<List<N>> queue = new LinkedList<>();
+        final Set<N> visited = new HashSet<>();
+        queue.add(List.of(source));
 
-        while(!queue.isEmpty()) {
-            N current = queue.poll();
-            if(current.equals(target)) {
-                return buildPath(predecessorMap, source, target);
+        while (!queue.isEmpty()) {
+            final List<N> path = queue.remove();
+            final N last = path.get(path.size() - 1);
+            if (last.equals(target)) {
+                return path;
             }
-            for(N neighbor : linkedNodes(current)) {
-                if(!visited.contains(neighbor)) {
-                    visited.add(neighbor);
-                    predecessorMap.put(neighbor, current);
-                    queue.add(neighbor);
+            if (visited.add(last)) {
+                for (final N neighbor : adjacencyMap.getOrDefault(last, Set.of())) {
+                    final List<N> newPath = new ArrayList<>(path);
+                    newPath.add(neighbor);
+                    queue.add(newPath);
                 }
             }
         }
-        return Collections.emptyList();
+        return List.of();
     }
-
 }
